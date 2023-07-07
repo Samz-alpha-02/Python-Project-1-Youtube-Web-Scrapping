@@ -2,7 +2,6 @@ flask
 flask_cors
 bs4
 pandas
-urllib.request
 selenium
 pymongo.mongo_client
 pymongo
