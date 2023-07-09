@@ -2,7 +2,7 @@ branch-defaults:
   main:
     environment: null
 global:
-  application_name: application
+  application_name: app
   branch: main
   default_ec2_keyname: null
   default_platform: Python 3.7
