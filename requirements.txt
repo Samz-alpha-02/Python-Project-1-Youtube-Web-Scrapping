@@ -5,5 +5,4 @@ pandas
 selenium
 pymongo
 pytube
-chromedriver
 gunicorn
