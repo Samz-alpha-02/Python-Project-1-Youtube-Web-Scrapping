@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 from flask_cors import CORS, cross_origin
 from bs4 import BeautifulSoup
 import pandas as pd
-import csv
 from pymongo.mongo_client import MongoClient
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -26,7 +25,10 @@ def index():
             url = request.form['content'].replace(" ", "")
             chrome_options = Options()
             chrome_options.add_argument("--headless")  # Run Chrome in headless mode
-            driver = webdriver.Chrome(options=chrome_options)
+            chrome_options.add_argument("--no-sandbox")
+            chrome_options.add_argument("--disable-dev-shm-usage")
+            chrome_options.binary_location = '/usr/bin/google-chrome-stable'  # Chrome/Chromium path
+            driver = webdriver.Chrome('/usr/local/bin/chromedriver', options=chrome_options)  # Chromedriver path
 
             driver.get(url)
             WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "ytd-rich-grid-media.style-scope.ytd-rich-item-renderer")))
@@ -38,7 +40,7 @@ def index():
 
             video_urls = soup.find_all("a", id="video-title-link")
             data = []
-            my_dict=[]
+            my_dict = []
             for i in range(min(5, len(titles))):
                 video_url = "https://www.youtube.com" + video_urls[i].get('href')
 
@@ -50,7 +52,13 @@ def index():
                 views_count = views[2 * i].text
                 publish_date = views[2 * i + 1].text
 
-                my_dict = {"Video URL":video_url,"Thumbnail URL":thumbnail_url,"Title of the Video":title,"Number of Views":views_count,"Date of Publish":publish_date}
+                my_dict = {
+                    "Video URL": video_url,
+                    "Thumbnail URL": thumbnail_url,
+                    "Title of the Video": title,
+                    "Number of Views": views_count,
+                    "Date of Publish": publish_date
+                }
 
                 data.append([video_url, thumbnail_url, title, views_count, publish_date])
 
@@ -72,4 +80,4 @@ def index():
         return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
