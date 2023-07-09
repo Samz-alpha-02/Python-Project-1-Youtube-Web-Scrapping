@@ -74,7 +74,7 @@ def index():
             return render_template('results.html', data=data)
 
         except Exception as e:
-            print('The Exception message is: ', e)
+            print('An error occurred:', str(e))
             return 'Something went wrong'
     else:
         return render_template('index.html')
