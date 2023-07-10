@@ -1,0 +1,13 @@
+services:
+  - name: app
+    # Set environment variable for Python to run in unbuffered mode
+    env:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    # Specify the Dockerfile to use for building the service
+    dockerfile: Dockerfile
+    buildCommand: docker build -t $RENDER_SERVICE_NAME:$RENDER_GIT_COMMIT . # Command to build the Docker image for the service
+    startCommand: python app.py # Command to start the application
+    envVars: # Set additional environment variables
+      - key: PORT
+        from: internal # This sets the PORT environment variable for the application
