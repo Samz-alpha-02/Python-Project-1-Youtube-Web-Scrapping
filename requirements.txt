@@ -1,8 +1,10 @@
 flask
-flask_cors
-bs4
+flask-cors
+requests-html
+beautifulsoup4
 pandas
-selenium
 pymongo
 pytube
-gunicorn
+selenium
+chromedriver
+webdriver_manager
