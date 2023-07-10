@@ -1,0 +1,112 @@
+body {
+  background-color: #91ced4;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.content {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  background-color: #327a81;
+  color: white;
+  font-size: 1.5em;
+  padding: 1rem;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  border-radius: 10px 10px 0 0;
+}
+
+.form {
+  text-align: center;
+  margin-bottom: 20px; /* Added */
+}
+
+#content,
+#num_videos {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.search-button {
+  display: block;
+  width: 100%;
+  padding: 15px; /* Increased */
+  background-color: #327a81;
+  color: white;
+  font-size: 1.5em; /* Increased */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out; /* Added transition effect */
+}
+
+.search-button:hover {
+  background-color: #285c61;
+}
+
+@media screen and (max-width: 700px) {
+  table,
+  tr,
+  td {
+    display: block;
+  }
+
+  td:first-child {
+    position: relative;
+    top: 0;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    width: 100%;
+    background-color: #c8e7ea;
+    border-bottom: 1px solid #91ced4;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+  }
+
+  td:not(:first-child) {
+    clear: both;
+    margin-left: 0;
+    padding: 10px;
+    position: relative;
+    text-align: left;
+  }
+
+  td:not(:first-child):before {
+    color: #91ced4;
+    content: attr(data-label);
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 120px;
+    text-align: right;
+    font-weight: bold;
+  }
+
+  td:last-child {
+    padding-bottom: 20px;
+  }
+
+  tr {
+    background-color: white !important;
+    border: 1px solid #6cbec6;
+    border-radius: 10px;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 0;
+  }
+}
