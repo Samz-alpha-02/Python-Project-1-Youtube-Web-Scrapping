@@ -1,11 +1,11 @@
 
-**YOUTUBE WEB SCRAPPER**
+##YOUTUBE WEB SCRAPPER
 
 This is a Python Flask application that scrapes YouTube video information based on a provided URL. It uses Selenium and BeautifulSoup to parse the HTML content of the webpage, retrieves relevant data, and stores it in a CSV file and a MongoDB database. The application is also deployed on Render Cloud Platform for easy accessibility.
 
 ## For Running the Application on Your Local System:
 
-A.Prerequisites:
+* A.Prerequisites:
 
 Before running the application, make sure you have the following installed on your system (if run on local system):
 
@@ -25,7 +25,7 @@ Before running the application, make sure you have the following installed on yo
 
 You will also need to have Google Chrome installed on your system as the code uses the Chrome web driver.
 
-B.Installation:
+* B.Installation:
 
 1.Clone the repository:
 
@@ -39,7 +39,7 @@ Copy code: cd your_repository
 
 Copy code: pip install -r requirements.txt
 
-C.Usage:
+* C.Usage:
 
 To run the application, follow these steps:
 
