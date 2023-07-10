@@ -1,12 +1,13 @@
-Here's a sample README file for the code provided.
 
 **YOUTUBE WEB SCRAPPER**
 
-This is a Python Flask application that scrapes YouTube video information based on a provided URL. It uses Selenium and BeautifulSoup to parse the HTML content of the webpage, retrieves relevant data, and stores it in a CSV file and a MongoDB database. The application is also deployed on Amazon AWS for easy accessibility.
+This is a Python Flask application that scrapes YouTube video information based on a provided URL. It uses Selenium and BeautifulSoup to parse the HTML content of the webpage, retrieves relevant data, and stores it in a CSV file and a MongoDB database. The application is also deployed on Render Cloud Platform for easy accessibility.
 
-**A. Prerequisites:**
+## For Running the Application on Your Local System:
 
-Before running the application, make sure you have the following installed on your system:
+A.Prerequisites:
+
+Before running the application, make sure you have the following installed on your system (if run on local system):
 
 1.Python 3.x
 
@@ -20,9 +21,11 @@ Before running the application, make sure you have the following installed on yo
 
 6.PyMongo
 
+7.Pytube
+
 You will also need to have Google Chrome installed on your system as the code uses the Chrome web driver.
 
-**B. Installation:**
+B.Installation:
 
 1.Clone the repository:
 
@@ -36,7 +39,7 @@ Copy code: cd your_repository
 
 Copy code: pip install -r requirements.txt
 
-**C. Usage:**
+C.Usage:
 
 To run the application, follow these steps:
 
@@ -52,12 +55,18 @@ Copy code: python application.py
 
 5.The scraped data will also be inserted into a MongoDB database named info_scrap in the collection info_scrap_data.
 
-**D. Notes:**
+## For Running the Application on Render Cloud Platform:
 
-1.The code is currently set to scrape information for a maximum of 5 videos from the provided YouTube URL. You can change this limit by modifying the min(5, len(titles)) line in the code.
+**USAGE**
 
-2.Make sure to update the MongoDB connection URI (uri) in the code with your own URI. You can obtain this URI from your MongoDB Atlas account.
+1.Enter the channel name and the number of videos to scrape in the search form.
 
-3.The CSV file will be overwritten each time the code is run. If you want to append new data to the existing file instead, change the file mode from "w" to "a" in the open() function.
+2.Click the "Search" button.
 
-4.This code is provided as a basic example and may require additional error handling and optimization for production use.
+3.The application will scrape the specified number of videos from the YouTube channel and store the data in the MongoDB database.
+
+4.A CSV file named scrapper.csv will be generated with the scraped data.
+
+## Contributing:
+
+Contributions are welcome! Please feel free to submit any issues or pull requests.
