@@ -8,7 +8,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support import expected_conditions as EC
-from pytube import YouTube
 import pandas as pd
 import csv
 from pymongo.mongo_client import MongoClient
@@ -49,35 +48,58 @@ def index():
             titles = soup.find_all("yt-formatted-string", id="video-title") #It finds all the <yt-formatted-string> elements with id="video-title"
             views = soup.find_all("span", class_="inline-metadata-item style-scope ytd-video-meta-block") #It finds all the <span> elements with class="inline-metadata-item style-scope ytd-video-meta-block".
             video_urls = soup.find_all("a", id="video-title-link") #This line finds all the <a> elements with id="video-title-link". These elements typically contain the URLs of the videos.
+            thumbnails = soup.find_all("img", class_="yt-core-image yt-core-image--fill-parent-height yt-core-image--fill-parent-width yt-core-image--content-mode-scale-aspect-fill yt-core-image--loaded") # Extract thumbnails from HTML
 
             data = []
             my_dict=[]
             
+            print(f"Found {len(titles)} titles, {len(views)} view elements, {len(video_urls)} video URLs, {len(thumbnails)} thumbnails")
+            
             for i in range(min(num_videos, len(titles))):
-                video_url = "https://www.youtube.com" + video_urls[i].get('href') #Retrieving the Video Url of each video.
+                try:
+                    video_url = "https://www.youtube.com" + video_urls[i].get('href') #Retrieving the Video Url of each video.
 
-                # Retrieving the Thumbnail URL using pytube.
-                yt = YouTube(video_url)
-                thumbnail_url = yt.thumbnail_url
+                    # Extract thumbnail URL from HTML (avoid pytube issues)
+                    thumbnail_url = "N/A"
+                    if i < len(thumbnails):
+                        thumbnail_url = thumbnails[i].get('src') or thumbnails[i].get('data-src') or "N/A"
+                    
+                    # If no direct thumbnail found, construct default YouTube thumbnail URL
+                    if thumbnail_url == "N/A":
+                        video_id = video_urls[i].get('href').split('watch?v=')[1].split('&')[0] if 'watch?v=' in video_urls[i].get('href') else "N/A"
+                        if video_id != "N/A":
+                            thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
 
-                title = titles[i].text #Retrieving the Titles of each video.
-                views_count = views[2 * i].text #Retrieving the Views of each video.
-                publish_date = views[2 * i + 1].text #Retrieving the video url of each video.
+                    title = titles[i].text.strip() if titles[i].text else "N/A" #Retrieving the Titles of each video.
+                    views_count = views[2 * i].text.strip() if 2 * i < len(views) else "N/A" #Retrieving the Views of each video.
+                    publish_date = views[2 * i + 1].text.strip() if 2 * i + 1 < len(views) else "N/A" #Retrieving the publish date.
 
-                #Storing the contents in a dictionary(for MongoDB)
-                my_dict = {"Video URL":video_url,"Thumbnail URL":thumbnail_url,"Title of the Video":title,"Number of Views":views_count,"Date of Publish":publish_date}
-                
-                data.append([video_url, thumbnail_url, title, views_count, publish_date])
+                    #Storing the contents in a dictionary(for MongoDB)
+                    my_dict = {"Video URL":video_url,"Thumbnail URL":thumbnail_url,"Title of the Video":title,"Number of Views":views_count,"Date of Publish":publish_date}
+                    
+                    # Match the data order with the DataFrame columns and template expectations
+                    data.append([video_url, thumbnail_url, title, views_count, publish_date])
+                    
+                    print(f"Processed video {i+1}: {title[:50]}...")
+                    
+                except Exception as video_error:
+                    print(f"Error processing video {i+1}: {str(video_error)}")
+                    continue
 
                 # MongoDB setup
-                uri = "mongodb+srv://Python_Project_1_Youtube_Web_Scraping:pwskills_pythonproject_123@cluster0.6xne1kl.mongodb.net/?retryWrites=true&w=majority"
-                client = MongoClient(uri)
-                db = client["info_scrap"]
-                info_col = db["info_scrap_data"]
-                info_col.insert_one(my_dict)
+                # uri = "mongodb+srv://Python_Project_1_Youtube_Web_Scraping:pwskills_pythonproject_123@cluster0.6xne1kl.mongodb.net/?retryWrites=true&w=majority"
+                # client = MongoClient(uri)
+                # db = client["info_scrap"]
+                # info_col = db["info_scrap_data"]
+                # info_col.insert_one(my_dict)
 
             # Creating a pandas DataFrame and saving as CSV file
-            df = pd.DataFrame(data, columns=['Video URL', 'Video Title', 'Views', 'Posted', 'Thumbnail Url'])
+            df = pd.DataFrame(data, columns=['Video URL', 'Thumbnail URL', 'Title of the Video', 'Number of Views', 'Date of Publish'])
+            
+            print(f"Scraped {len(data)} videos successfully")
+            
+            print("Sample data:", data[:2] if data else "No data found")
+            
             df.to_csv('scrapper.csv', index=False)
 
             return render_template('results.html', data=data)
